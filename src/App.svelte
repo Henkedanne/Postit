@@ -50,7 +50,7 @@
         <Postit {text} {id} />
       {/each}
     {:else}
-      <p>Add some postis</p>
+      <p>Add some post-its</p>
     {/if}
   </div>
 </main>
