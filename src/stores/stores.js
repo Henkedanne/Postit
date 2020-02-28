@@ -6,8 +6,15 @@ function post() {
     let postsArr = []
     return {
         subscribe,
-        addPost: (text) => {
-            postsArr.push({ text });
+        addPost: (text, id) => {
+            postsArr.push({ text, id });
+            update(() => postsArr)
+        },
+        removePost: (id) => {
+            const filter = postsArr.filter((post) => {
+                return post.id !== id;
+            })
+            postsArr = filter
             update(() => postsArr)
         },
         reset: () => {

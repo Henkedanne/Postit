@@ -1,6 +1,21 @@
 <script>
   import { fly } from "svelte/transition";
+  import { posts } from "../stores/stores.js";
   export let text;
+  export let id;
+  let hover = false;
+
+  function handleMouseEnter() {
+    hover = true;
+  }
+
+  function handleMouseLeave() {
+    hover = false;
+  }
+
+  function handleRemove(id) {
+    posts.removePost(id);
+  }
 </script>
 
 <style>
@@ -24,8 +39,21 @@
     width: 100%;
     background: rgb(155, 189, 241);
   }
+  .remove {
+    position: absolute;
+    top: 5px;
+    right: 10px;
+    cursor: pointer;
+  }
 </style>
 
-<div class="postit" transition:fly={{ y: -20, duration: 300 }}>
+<div
+  on:mouseenter={handleMouseEnter}
+  on:mouseleave={handleMouseLeave}
+  class="postit"
+  transition:fly={{ y: -20, duration: 300 }}>
+  {#if hover}
+    <span on:click={handleRemove(id)} class="remove">X</span>
+  {/if}
   <p class="text">{text}</p>
 </div>

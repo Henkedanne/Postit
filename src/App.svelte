@@ -3,8 +3,6 @@
   import { posts } from "./stores/stores.js";
   import Postinput from "./components/Postinput.svelte";
   export let name;
-
-  console.log("posts", posts);
 </script>
 
 <style>
@@ -32,22 +30,27 @@
   aside {
     height: 100%;
     width: 200px;
-    border-right: 1px solid black;
+    border-right: 1px solid #2600ff;
     float: left;
+  }
+
+  p {
+    margin-left: 10px;
   }
 </style>
 
 <main>
   <h1>{name}</h1>
   <aside>
-    Sidebar
     <Postinput />
   </aside>
   <div class="grid">
-    {#if posts}
-      {#each $posts as { text }}
-        <Postit {text} />
+    {#if $posts.length > 0}
+      {#each $posts as { text, id }}
+        <Postit {text} {id} />
       {/each}
-    {:else}Add some postis{/if}
+    {:else}
+      <p>Add some postis</p>
+    {/if}
   </div>
 </main>

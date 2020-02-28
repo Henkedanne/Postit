@@ -1,10 +1,11 @@
 <script>
   import { posts } from "../stores/stores.js";
   let text = "";
-
+  let id = 1;
   function handleSubmit() {
-    posts.addPost(text);
+    posts.addPost(text, id);
     text = "";
+    id++;
   }
 </script>
 
