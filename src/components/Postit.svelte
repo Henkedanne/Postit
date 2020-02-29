@@ -1,8 +1,12 @@
 <script>
   import { fly } from "svelte/transition";
   import { posts } from "../stores/stores.js";
+  import { createEventDispatcher } from "svelte";
+
+  const dispatch = createEventDispatcher();
   export let text;
   export let id;
+
   let hover = false;
 
   function handleMouseEnter() {
@@ -15,6 +19,18 @@
 
   function handleRemove(id) {
     posts.removePost(id);
+  }
+
+  function handleDragStart(e) {
+    e.dataTransfer.dropEffect = "move";
+    e.dataTransfer.setData("text/plain", e.target.id);
+  }
+
+  function handleDragOver(e) {
+    e.preventDefault();
+    dispatch("dropoverid", {
+      id: e.target.id
+    });
   }
 </script>
 
@@ -48,10 +64,14 @@
 </style>
 
 <div
+  {id}
   on:mouseenter={handleMouseEnter}
   on:mouseleave={handleMouseLeave}
   class="postit"
-  transition:fly={{ y: -20, duration: 300 }}>
+  draggable="true"
+  transition:fly={{ y: -20, duration: 300 }}
+  on:dragstart={handleDragStart}
+  on:dragover={handleDragOver}>
   {#if hover}
     <span on:click={handleRemove(id)} class="remove">X</span>
   {/if}

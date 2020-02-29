@@ -3,6 +3,28 @@
   import { posts } from "./stores/stores.js";
   import Postinput from "./components/Postinput.svelte";
   export let name;
+  let dropoverid;
+  function handleDragOver(e) {
+    e.preventDefault();
+  }
+
+  function handleDrop(e) {
+    e.preventDefault();
+
+    const id = e.dataTransfer.getData("text/plain");
+    const dropOverItem = document.getElementById(dropoverid);
+    const draggedItem = document.getElementById(id);
+
+    // TODO: Should be able to sort to last item in nodelist.
+    if (dropOverItem.nextElementSibling) {
+      draggedItem.parentNode.insertBefore(draggedItem, dropOverItem);
+    } else {
+      draggedItem.parentNode.lastChild = draggedItem;
+    }
+  }
+  function setDropOverID(e) {
+    dropoverid = e.detail.id;
+  }
 </script>
 
 <style>
@@ -44,10 +66,10 @@
   <aside>
     <Postinput />
   </aside>
-  <div class="grid">
+  <div class="grid" on:dragover={handleDragOver} on:drop={handleDrop}>
     {#if $posts.length > 0}
       {#each $posts as { text, id }}
-        <Postit {text} {id} />
+        <Postit {text} {id} on:dropoverid={setDropOverID} />
       {/each}
     {:else}
       <p>Add some post-its</p>
