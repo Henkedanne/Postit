@@ -3,10 +3,10 @@
   import { posts } from "../stores/stores.js";
   import { createEventDispatcher } from "svelte";
 
-  const dispatch = createEventDispatcher();
   export let text;
   export let id;
-
+  const dispatch = createEventDispatcher();
+  let dragOver = false;
   let hover = false;
 
   function handleMouseEnter() {
@@ -25,11 +25,21 @@
     e.dataTransfer.dropEffect = "move";
     e.dataTransfer.setData("text/plain", e.target.id);
   }
+  // TODO: Fixa så att classen over försvinner när en släpper drag.
 
   function handleDragOver(e) {
     e.preventDefault();
+    dragOver = true;
     dispatch("dropoverid", {
       id: e.target.id
+    });
+  }
+
+  function handleDragLeave(e) {
+    e.preventDefault();
+    dragOver = false;
+    dispatch("dropoverid", {
+      id: null
     });
   }
 </script>
@@ -46,6 +56,10 @@
     background: rgb(197, 212, 255);
     align-items: center;
   }
+  .over {
+    transform: scale(0.9);
+  }
+
   .postit:before {
     content: "";
     position: absolute;
@@ -68,10 +82,13 @@
   on:mouseenter={handleMouseEnter}
   on:mouseleave={handleMouseLeave}
   class="postit"
+  class:over={dragOver}
   draggable="true"
   transition:fly={{ y: -20, duration: 300 }}
   on:dragstart={handleDragStart}
+  on:dragleave={handleDragLeave}
   on:dragover={handleDragOver}>
+
   {#if hover}
     <span on:click={handleRemove(id)} class="remove">X</span>
   {/if}

@@ -4,12 +4,16 @@
   import Postinput from "./components/Postinput.svelte";
   export let name;
   let dropoverid;
+
   function handleDragOver(e) {
     e.preventDefault();
   }
 
   function handleDrop(e) {
     e.preventDefault();
+    if (!dropoverid) {
+      return false;
+    }
 
     const id = e.dataTransfer.getData("text/plain");
     const dropOverItem = document.getElementById(dropoverid);
