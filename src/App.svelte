@@ -15,11 +15,10 @@
     const dropOverItem = document.getElementById(dropoverid);
     const draggedItem = document.getElementById(id);
 
-    // TODO: Should be able to sort to last item in nodelist.
     if (dropOverItem.nextElementSibling) {
       draggedItem.parentNode.insertBefore(draggedItem, dropOverItem);
     } else {
-      draggedItem.parentNode.lastChild = draggedItem;
+      draggedItem.parentNode.appendChild(draggedItem);
     }
   }
   function setDropOverID(e) {
