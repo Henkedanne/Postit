@@ -2,6 +2,10 @@
   import Postit from "./components/Postit.svelte";
   import { posts } from "./stores/stores.js";
   import Postinput from "./components/Postinput.svelte";
+  import Signin from './components/Signin.svelte';
+  import { onMount } from "svelte";
+  import {db} from './firebase';
+
   export let name;
   let dropoverid;
 
@@ -28,6 +32,8 @@
   function setDropOverID(e) {
     dropoverid = e.detail.id;
   }
+
+  console.log(db);
 </script>
 
 <style>
@@ -66,6 +72,7 @@
 
 <main>
   <h1>{name}</h1>
+  <Signin/>
   <aside>
     <Postinput />
   </aside>
