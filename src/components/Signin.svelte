@@ -1,11 +1,10 @@
 <script>
   import { auth } from "../firebase";
   import { onMount } from "svelte";
+  import { user } from '../stores/stores';
 
-  $: userId = "";
-
+  console.log( 'users', $user)
   function SigninToggle() {
-    console.log("Signing");
     if (auth.currentUser) {
       auth.signOut();
     } else {
@@ -19,11 +18,13 @@
   }
 
   function InitAuth() {
-    auth.onAuthStateChanged(user => {
-      if (user) {
-        userId = user.uid;
+    auth.onAuthStateChanged(firebaseUser => {
+      if (firebaseUser) {
+      console.log("Signing in:", firebaseUser.uid );
+        user.setUser(firebaseUser.uid);
       } else {
-        userId = "";
+        user.removeUser()
+        console.log('sign out')
       }
     });
   }
@@ -34,6 +35,6 @@
 
 </script>
 
-<button on:click={SigninToggle}>{!userId ? 'Sign in' : 'Sign out'}</button>
+<button on:click={SigninToggle}>{!$user ? 'Sign in' : 'Sign out'}</button>
 
-<p>{userId ? `Welcome ${userId}` : ''}</p>
+<p>{$user ? `Welcome ${$user}` : ''}</p>
